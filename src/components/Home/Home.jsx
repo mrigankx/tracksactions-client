@@ -44,8 +44,15 @@ const Home = () => {
             <HomeImage />
           </Grid>
           <Grid item xs={12} sm={3}>
-            <Paper className={classes.paper}>
-              <Typography variant="h6" align="center">
+            <Paper
+              className={classes.paper}
+              style={{
+                borderRadius: "20px",
+                background: "linear-gradient(145deg, #2e2e2e, #272727)",
+                boxShadow: "9px 9px 10px #1e1e1e,-9px -9px 10px #383838",
+              }}
+            >
+              <Typography variant="h6" align="center" style={{ color: "#fff" }}>
                 Please Sign in to manage and track your expenses or you can use
                 demo account.
               </Typography>

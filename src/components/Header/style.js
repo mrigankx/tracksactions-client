@@ -18,16 +18,9 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    borderRadius: "20px",
-    background: "linear-gradient(145deg, #2e2e2e, #272727)",
-    boxShadow: "9px 9px 10px #1e1e1e,-9px -9px 10px #383838",
-    color: "#fff"
+    // color: "#fff"
   },
   title: {
-    flexGrow: 1,
-    fontWeight: "bolder",
-    color: "#fff",
-    textDecoration: "none",
     fontSize: "3rem"
   },
   headerContainer: {
