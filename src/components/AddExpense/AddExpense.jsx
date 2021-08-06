@@ -20,11 +20,13 @@ const AddExpense = () => {
   const classes = useStyles();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
   const history = useHistory();
+  const username = user ? user.email : "";
   const initialState = {
-    username: user.email,
-    spent_category: "",
+    username: username,
+    spent_category: username,
     spent_on: "",
     amount: "",
+    entrydate: new Date(),
   };
   const [newExpense, setNewExpense] = useState(initialState);
   const handleSubmit = async (e) => {
@@ -66,6 +68,13 @@ const AddExpense = () => {
         Add New Expense
       </Typography>
       <form className={classes.form} onSubmit={handleSubmit}>
+        <Input
+          value={newExpense.entrydate}
+          name="entrydate"
+          handleChange={handleChange}
+          type="date"
+          isRequired={true}
+        />
         <FormControl className={classes.formControl}>
           <InputLabel
             id="demo-simple-select-label"
