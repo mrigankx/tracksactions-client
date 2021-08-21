@@ -84,7 +84,7 @@ const StatsDetails = ({ userdata }) => {
                   ₹<CountUp start={0} end={data.value} />
                 </Typography>
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   align="left"
                   className={classes.tiles_footer}
                 >

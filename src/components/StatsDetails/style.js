@@ -32,14 +32,18 @@ export default makeStyles((theme) => ({
             height: "12vh",
             paddingTop: "10px",
             borderRadius: "30px",
+            width: "75%",
+            marginLeft: "auto",
+            marginRight: "auto",
+
         },
         tiles_header: {
-            fontSize: "1.7rem",
+            fontSize: "1.3rem",
             padding: "10px"
         }
         ,
         tiles_footer: {
-            fontSize: "1.2rem",
+            fontSize: "1rem",
             bottom: 6,
         },
     },

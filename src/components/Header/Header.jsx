@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import decode from "jwt-decode";
 import useStyles from "./style";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Avatar,
-  Grid,
-} from "@material-ui/core";
+import { Toolbar, Typography, Button, Avatar } from "@material-ui/core";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { LOGOUT } from "../../constants/index";

@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Grid, CircularProgress, Button } from "@material-ui/core";
+import {
+  Typography,
+  Grid,
+  CircularProgress,
+  Button,
+  Grow,
+} from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
 import useStyles from "./style";
 import AddExpense from "../AddExpense/AddExpense";
 import ChangeBalance from "../ChangeBalance/ChangeBalance";
+
 import DeleteIcon from "@material-ui/icons/Delete";
 import * as api from "../../api/index";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Graphs from "../Graphs/Graphs";
+import filteredData from "../../utils/filteredData";
 const columns = [
   { field: "_id", headerName: "ID", hide: true },
   {
@@ -75,21 +83,23 @@ const DashboardDetails = ({ userinfo, isShow }) => {
           <Grid item xs={12} sm={9}>
             <div className={classes.data_table}>
               <Typography
-                variant="h3"
+                variant="h4"
                 align="center"
                 className={classes.table_header}
               >
                 Expenses Till Now
               </Typography>
               {isDelete && (
-                <Button
-                  variant="contained"
-                  className={classes.del_exp}
-                  onClick={deleteRows}
-                >
-                  <DeleteIcon />
-                  &nbsp; Delete
-                </Button>
+                <Grow in>
+                  <Button
+                    variant="contained"
+                    className={classes.del_exp}
+                    onClick={deleteRows}
+                  >
+                    <DeleteIcon />
+                    &nbsp; Delete
+                  </Button>
+                </Grow>
               )}
               <DataGrid
                 rows={userinfo}
@@ -103,7 +113,7 @@ const DashboardDetails = ({ userinfo, isShow }) => {
                 }
               />
             </div>
-            <Graphs userinfo={userinfo} />
+            <Graphs userinfo={filteredData(userinfo)} />
           </Grid>
         </>
       )}

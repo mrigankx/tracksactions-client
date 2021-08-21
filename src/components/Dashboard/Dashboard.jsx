@@ -7,6 +7,7 @@ import StatsDetails from "../StatsDetails/StatsDetails";
 import { FETCH_ALL } from "../../constants/index";
 import { useLocation } from "react-router-dom";
 import DashboardDetails from "../DashboardDetails.js/DashboardDetails";
+import filteredData from "../../utils/filteredData";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -53,7 +54,7 @@ const Dashboard = () => {
         alignItems="stretch"
         spacing={3}
       >
-        <StatsDetails userdata={userInfo} />
+        <StatsDetails userdata={filteredData(userInfo)} />
         <DashboardDetails userinfo={userInfo} isShow={isShowUpdate} />
       </Grid>
     </Grow>

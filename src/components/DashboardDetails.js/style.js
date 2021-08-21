@@ -40,8 +40,8 @@ export default makeStyles((theme) => ({
             marginTop: "20px"
         },
         del_exp: {
-            fontSize: "1rem",
-            marginTop: "20px"
+            fontSize: "0.7rem",
+            marginTop: "15px"
         },
         data_grid: {
             minHeight: "500px",

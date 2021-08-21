@@ -1,36 +1,41 @@
-import React, { useState } from "react";
-import {
-  Typography,
-  Paper,
-  Button,
-  Select,
-  InputLabel,
-  FormControl,
-  MenuItem,
-} from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Typography, Paper, Divider } from "@material-ui/core";
 import * as api from "../../api/index";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 import useStyles from "./style";
-import Input from "../Login/Input";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Form from "./Form/Form";
+import formatDate from "../../utils/formatDate";
+import { useSpeechContext } from "@speechly/react-client";
+import InfoCard from "../InfoCard/InfoCard";
+import {
+  PushToTalkButton,
+  PushToTalkButtonContainer,
+} from "@speechly/react-ui";
+
 toast.configure();
 const AddExpense = () => {
   const classes = useStyles();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+  const [isEasy, setIsEasy] = useState(false);
   const history = useHistory();
+  const { segment } = useSpeechContext();
+
   const username = user ? user.email : "";
   const initialState = {
     username: username,
-    spent_category: username,
+    spent_category: "",
     spent_on: "",
     amount: "",
-    entrydate: new Date(),
+    entrydate: formatDate(new Date()),
   };
   const [newExpense, setNewExpense] = useState(initialState);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    console.log("in submit");
+    console.log(newExpense);
+    if (Number.isNaN(Number(newExpense.amount))) return;
+
     try {
       const res = await api.addExpense(newExpense);
       if (!res.status === 201) {
@@ -53,7 +58,47 @@ const AddExpense = () => {
   const handleChange = (e) => {
     setNewExpense({ ...newExpense, [e.target.name]: e.target.value });
   };
+  useEffect(() => {
+    if (segment) {
+      if (segment.isFinal && segment.intent.intent === "create_transaction") {
+        return handleSubmit();
+      } else if (
+        segment.isFinal &&
+        segment.intent.intent === "cancel_transaction"
+      ) {
+        return setNewExpense(initialState);
+      }
 
+      segment.entities.forEach((s) => {
+        const category = `${s.value.charAt(0)}${s.value
+          .slice(1)
+          .toLowerCase()}`;
+
+        switch (s.type) {
+          case "amount":
+            setNewExpense({ ...newExpense, amount: s.value });
+            break;
+          case "category":
+            setNewExpense({ ...newExpense, spent_category: category });
+            break;
+          case "date":
+            setNewExpense({ ...newExpense, entrydate: s.value });
+            break;
+          default:
+            break;
+        }
+      });
+
+      if (
+        segment.isFinal &&
+        newExpense.amount &&
+        newExpense.spent_category &&
+        newExpense.entrydate
+      ) {
+        handleSubmit();
+      }
+    }
+  }, [segment]);
   return (
     <Paper className={classes.new_form}>
       <Typography
@@ -67,65 +112,34 @@ const AddExpense = () => {
       >
         Add New Expense
       </Typography>
-      <form className={classes.form} onSubmit={handleSubmit}>
-        <Input
-          value={newExpense.entrydate}
-          name="entrydate"
-          handleChange={handleChange}
-          type="date"
-          isRequired={true}
-        />
-        <FormControl className={classes.formControl}>
-          <InputLabel
-            id="demo-simple-select-label"
-            style={{ color: "#808080" }}
-          >
-            Spent Category
-          </InputLabel>
-          <Select
-            required={true}
-            labelId="demo-simple-select-label"
-            name="spent_category"
-            id="demo-simple-select"
-            value={newExpense.spent_category}
-            onChange={handleChange}
-            className={classes.selected_val}
-          >
-            <MenuItem value="Food & Dining">Food & Dining</MenuItem>
-            <MenuItem value="Entertainment">Entertainment</MenuItem>
-            <MenuItem value="Education">Education</MenuItem>
-            <MenuItem value="Shopping">Shopping</MenuItem>
-            <MenuItem value="Health & Fitness">Health & Fitness</MenuItem>
-            <MenuItem value="Gifts & Donations">Gifts & Donations</MenuItem>
-            <MenuItem value="Investments">Investments</MenuItem>
-            <MenuItem value="Bills & Utilities">Bills & Utilities</MenuItem>
-            <MenuItem value="Auto & Transport">Auto & Transport</MenuItem>
-            <MenuItem value="Drinks & Smoking">Drinks & Smoking</MenuItem>
-            <MenuItem value="Others">Others</MenuItem>
-          </Select>
-        </FormControl>
-
-        <Input
-          value={newExpense.spent_on}
-          label="Spent On"
-          name="spent_on"
-          handleChange={handleChange}
-          type="text"
-          isRequired={false}
-        />
-        <Input
-          value={newExpense.amount}
-          label="Amount"
-          name="amount"
-          handleChange={handleChange}
-          type="number"
-          isRequired={true}
-        />
-        <Button type="submit" variant="contained" className={classes.add_exp}>
-          <AddCircleIcon />
-          &nbsp; Add Expense
-        </Button>
-      </form>
+      {isEasy && (
+        <Paper className={classes.info_card}>
+          <InfoCard />
+          <Divider />
+          <Typography align="center" variant="subtitle2" gutterBottom>
+            {segment ? (
+              <div className={classes.segment}>
+                {segment.words.map((w) => w.value).join(" ")}
+              </div>
+            ) : null}
+            {/* {isSpeaking ? <BigTranscript /> : 'Start adding transactions'}  */}
+          </Typography>
+        </Paper>
+      )}
+      <Form
+        classes={classes}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        newExpense={newExpense}
+        isEasy={isEasy}
+        setIsEasy={setIsEasy}
+        setNewExpense={setNewExpense}
+      />
+      {isEasy && (
+        <PushToTalkButtonContainer>
+          <PushToTalkButton />
+        </PushToTalkButtonContainer>
+      )}
     </Paper>
   );
 };

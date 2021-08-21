@@ -2,20 +2,21 @@ import { Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
 import useStyles from "./style";
+import CATEGORIES from "../../constants/categories";
 const Graphs = ({ userinfo }) => {
   const classes = useStyles();
   console.log(userinfo);
   const [graphdata, setGraphData] = useState({
-    "Food & Dining": 0,
+    Food: 0,
     Entertainment: 0,
     Education: 0,
     Shopping: 0,
-    "Health & Fitness": 0,
-    "Gifts & Donations": 0,
+    Health: 0,
+    Gifts: 0,
     Investments: 0,
-    "Bills & Utilities": 0,
-    "Auto & Transport": 0,
-    "Drinks & Smoking": 0,
+    Bills: 0,
+    Travel: 0,
+    Smoking: 0,
     Others: 0,
   });
   const groups = userinfo.reduce((groups, item) => {
@@ -37,32 +38,20 @@ const Graphs = ({ userinfo }) => {
   }
   console.log(graphdata);
   const data = {
-    labels: [
-      "Food & Dining",
-      "Entertainment",
-      "Education",
-      "Shopping",
-      "Health & Fitness",
-      "Gifts & Donations",
-      "Investments",
-      "Bills & Utilities",
-      "Auto & Transport",
-      "Drinks & Smoking",
-      "Others",
-    ],
+    labels: CATEGORIES,
     datasets: [
       {
         data: [
-          graphdata["Food & Dining"],
+          graphdata["Food"],
           graphdata["Entertainment"],
           graphdata["Education"],
           graphdata["Shopping"],
-          graphdata["Health & Fitness"],
-          graphdata["Gifts & Donations"],
+          graphdata["Health"],
+          graphdata["Gifts"],
           graphdata["Investments"],
-          graphdata["Bills & Utilities"],
-          graphdata["Auto & Transport"],
-          graphdata["Drinks & Smoking"],
+          graphdata["Bills"],
+          graphdata["Travel"],
+          graphdata["Smoking"],
           graphdata["Others"],
         ],
         backgroundColor: [
@@ -95,9 +84,9 @@ const Graphs = ({ userinfo }) => {
   };
 
   return (
-    <>
+    <div className={classes.graph_container}>
       <Typography
-        variant="h3"
+        variant="h4"
         color="primary"
         align="center"
         className={classes.cate_header}
@@ -109,10 +98,13 @@ const Graphs = ({ userinfo }) => {
           height={375}
           width={507}
           data={data}
-          options={{ maintainAspectRatio: false, responsive: true }}
+          options={{
+            maintainAspectRatio: false,
+            responsive: true,
+          }}
         />
       </div>
-    </>
+    </div>
   );
 };
 
