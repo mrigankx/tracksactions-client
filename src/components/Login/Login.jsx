@@ -46,7 +46,6 @@ const Login = () => {
       } else {
         await dispatch(signin(formData, history));
       }
-      console.log("formatting form data");
       setFormData({
         firstName: "",
         lastName: "",
@@ -67,14 +66,11 @@ const Login = () => {
   const googleSuccess = async (res) => {
     const result = res?.profileObj;
     const token = res?.tokenId;
-    console.log(token);
     try {
       const res = await api.signupwithgoogle({
         name: result?.name,
         email: result?.email,
       });
-      console.log("google signin");
-      console.log(res);
       if (res.status !== 201) {
         const error = new Error(res.error);
         throw error;

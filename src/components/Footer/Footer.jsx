@@ -15,7 +15,7 @@ const Footer = () => {
           Developed by{" "}
           <a
             className={classes.dev_link}
-            href="https://www.facebook.com/mrigankx/"
+            href="https://github.com/mrigankx"
             target="_blank"
             rel="noreferrer"
           >

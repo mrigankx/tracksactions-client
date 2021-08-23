@@ -27,10 +27,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-start",
   },
-  logo: {
-    height: "10vh",
-    width: "4vw",
-  },
+
   toolbar: {
     display: "flex",
     justifyContent: "flex-end",
@@ -75,12 +72,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "0.6rem",
       borderRadius: "20px"
     },
-    logo: {
-      height: "5vh",
-      width: "7vw",
-      marginLeft: "5px"
 
-    },
     toolbar: {
       width: "300px",
       justifyContent: "center",

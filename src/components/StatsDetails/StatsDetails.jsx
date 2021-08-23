@@ -3,6 +3,8 @@ import { Grow, Grid, Card, Typography } from "@material-ui/core";
 import * as api from "../../api/index";
 import CountUp from "react-countup";
 import useStyle from "./style";
+import { useDispatch } from "react-redux";
+import { setTotalInStore } from "../../actions";
 const StatsDetails = ({ userdata }) => {
   const classes = useStyle();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -10,6 +12,7 @@ const StatsDetails = ({ userdata }) => {
   const [maxbal, setMaxBal] = useState(0);
   const [balanceLeft, setBalanceLeft] = useState(0);
   const [overbudget, setOverbudget] = useState(0);
+  const dispatch = useDispatch();
   const setUserStats = async () => {
     setTotal(() => {
       return userdata.reduce(function (accumulator, item) {
@@ -51,6 +54,7 @@ const StatsDetails = ({ userdata }) => {
     if (maxbal > total) {
       setOverbudget(0);
     }
+    dispatch(setTotalInStore(total));
   }, [maxbal, total]);
 
   const carddata = [

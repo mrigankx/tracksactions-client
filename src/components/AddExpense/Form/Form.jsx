@@ -42,8 +42,8 @@ const Form = ({
           name="spent_category"
         >
           {CATEGORIES.map((c) => (
-            <MenuItem key={c} value={c}>
-              {c}
+            <MenuItem key={c.name} value={c.name}>
+              {c.icon} &nbsp; {c.name}
             </MenuItem>
           ))}
         </Select>
@@ -51,7 +51,7 @@ const Form = ({
 
       <Input
         value={newExpense.spent_on}
-        label="Spent On"
+        label="Spent Details"
         name="spent_on"
         handleChange={handleChange}
         type="text"

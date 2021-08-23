@@ -32,10 +32,7 @@ const AddExpense = () => {
   };
   const [newExpense, setNewExpense] = useState(initialState);
   const handleSubmit = async () => {
-    console.log("in submit");
-    console.log(newExpense);
     if (Number.isNaN(Number(newExpense.amount))) return;
-
     try {
       const res = await api.addExpense(newExpense);
       if (!res.status === 201) {
@@ -45,6 +42,7 @@ const AddExpense = () => {
       toast.success("Added Successfully", {
         position: toast.POSITION.TOP_CENTER,
       });
+      if (isEasy) setIsEasy(false);
       history.push("/dashboard");
     } catch (error) {
       console.log(error);
@@ -122,7 +120,6 @@ const AddExpense = () => {
                 {segment.words.map((w) => w.value).join(" ")}
               </div>
             ) : null}
-            {/* {isSpeaking ? <BigTranscript /> : 'Start adding transactions'}  */}
           </Typography>
         </Paper>
       )}

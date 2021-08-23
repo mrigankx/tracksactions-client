@@ -5,13 +5,15 @@ export default makeStyles((theme) => ({
         width: "auto",
         padding: "10px",
         borderRadius: "49px",
+        minHeight: "400px",
+        height: "auto",
         background: "#2b2b2b",
         boxShadow: "11px 11px 22px #1e1e1e, -11px -11px 22px #383838",
         marginTop: "40px",
     },
     data_grid: {
         border: "none",
-        minHeight: "650px",
+        minHeight: "400px",
         height: "auto",
         color: "#fff",
         "& .MuiTablePagination-toolbar": {

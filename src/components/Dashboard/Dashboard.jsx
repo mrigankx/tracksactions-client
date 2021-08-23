@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import * as api from "../../api/index";
-import { Grow, Grid } from "@material-ui/core";
+import { Grow, Grid, Typography } from "@material-ui/core";
 import StatsDetails from "../StatsDetails/StatsDetails";
 import { FETCH_ALL } from "../../constants/index";
 import { useLocation } from "react-router-dom";
 import DashboardDetails from "../DashboardDetails.js/DashboardDetails";
 import filteredData from "../../utils/filteredData";
+import InfoIcon from "@material-ui/icons/Info";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -47,17 +48,28 @@ const Dashboard = () => {
     return null;
   }
   return (
-    <Grow in>
-      <Grid
-        container
-        justifycontent="space-between"
-        alignItems="stretch"
-        spacing={3}
+    <>
+      <Typography
+        variant="body1"
+        align="center"
+        style={{ alignItems: "center", color: "#fff", padding: "5px 5px" }}
+        gutterBottom
       >
-        <StatsDetails userdata={filteredData(userInfo)} />
-        <DashboardDetails userinfo={userInfo} isShow={isShowUpdate} />
-      </Grid>
-    </Grow>
+        <InfoIcon /> &nbsp; User can change their Budget Balance on every first
+        5days of the month.
+      </Typography>
+      <Grow in>
+        <Grid
+          container
+          justifycontent="space-between"
+          alignItems="stretch"
+          spacing={3}
+        >
+          <StatsDetails userdata={filteredData(userInfo)} />
+          <DashboardDetails userinfo={userInfo} isShow={isShowUpdate} />
+        </Grid>
+      </Grow>
+    </>
   );
 };
 

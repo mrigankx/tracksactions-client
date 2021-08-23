@@ -18,34 +18,48 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Graphs from "../Graphs/Graphs";
 import filteredData from "../../utils/filteredData";
-const columns = [
-  { field: "_id", headerName: "ID", hide: true },
-  {
-    field: "entrydate",
-    headerName: "Date",
-    width: 130,
-    valueFormatter: (params) => {
-      const formattedValue = new Date(params.value).toLocaleDateString();
-      return formattedValue;
-    },
-  },
-  { field: "spent_category", headerName: "Category", width: 130 },
-  { field: "spent_on", headerName: "Spent On", width: 130 },
-  {
-    field: "amount",
-    headerName: "Amount",
-    type: "number",
-    valueFormatter: (params) => {
-      return `₹ ${params.value}`;
-    },
-    width: 130,
-  },
-];
+import { useMediaQuery } from "react-responsive";
+
 const DashboardDetails = ({ userinfo, isShow }) => {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const width = isTabletOrMobile ? 120 : 190;
+  const columns = [
+    { field: "_id", headerName: "ID", hide: true },
+    {
+      field: "entrydate",
+      headerName: "Date",
+      width: width,
+      valueFormatter: (params) => {
+        const formattedValue = new Date(params.value).toLocaleDateString();
+        return formattedValue;
+      },
+    },
+    {
+      field: "spent_category",
+      headerName: "Category",
+      width: width,
+    },
+    {
+      field: "spent_on",
+      headerName: "Spent Details",
+      width: width,
+    },
+    {
+      field: "amount",
+      headerName: "Amount",
+      type: "number",
+      valueFormatter: (params) => {
+        return `₹ ${params.value}`;
+      },
+      width: 130,
+    },
+  ];
+
   const [selectedRows, setSelectedRows] = useState([]);
   const [isDelete, setIsDelete] = useState(false);
   const history = useHistory();
   const classes = useStyles();
+
   const deleteRows = async () => {
     try {
       const res = await api.deleteexpense({ selectedRows });
@@ -76,7 +90,25 @@ const DashboardDetails = ({ userinfo, isShow }) => {
     <>
       {!userinfo.length ? (
         <>
-          <CircularProgress />
+          <Grid item xs={12} sm={9}>
+            <div className={classes.data_table}>
+              <Typography
+                variant="h4"
+                align="center"
+                className={classes.table_header}
+              >
+                Expenses Till Now
+              </Typography>
+              <Typography
+                variant="h6"
+                align="center"
+                color="secondary"
+                style={{ marginTop: "20%" }}
+              >
+                No Data Available. Try to add some expenses.
+              </Typography>
+            </div>
+          </Grid>
         </>
       ) : (
         <>
@@ -104,7 +136,7 @@ const DashboardDetails = ({ userinfo, isShow }) => {
               <DataGrid
                 rows={userinfo}
                 columns={columns}
-                pageSize={10}
+                pageSize={isTabletOrMobile ? 7 : 5}
                 getRowId={(row) => row._id}
                 className={classes.data_grid}
                 checkboxSelection
@@ -119,7 +151,7 @@ const DashboardDetails = ({ userinfo, isShow }) => {
       )}
       <Grid item xs={12} sm={3}>
         <AddExpense />
-        {isShow && <ChangeBalance />}
+        {(isShow || !userinfo.length) && <ChangeBalance />}
       </Grid>
     </>
   );

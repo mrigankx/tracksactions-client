@@ -1,11 +1,14 @@
 import { Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import useStyles from "./style";
+import { useSelector } from "react-redux";
 import CATEGORIES from "../../constants/categories";
+import calculatePercentage from "../../utils/calculatePercentage";
 const Graphs = ({ userinfo }) => {
   const classes = useStyles();
-  console.log(userinfo);
+  const expense = useSelector((state) => state.expense);
+  const total = expense.total;
   const [graphdata, setGraphData] = useState({
     Food: 0,
     Entertainment: 0,
@@ -19,64 +22,61 @@ const Graphs = ({ userinfo }) => {
     Smoking: 0,
     Others: 0,
   });
-  const groups = userinfo.reduce((groups, item) => {
-    const group = groups[item.spent_category] || [];
-    group.push(item.amount);
-    groups[item.spent_category] = group;
-    return groups;
-  }, {});
 
-  if (groups) {
-    for (var grpkey of Object.keys(groups)) {
-      for (var key of Object.keys(graphdata)) {
-        if (key === grpkey) {
-          console.log(key);
-          graphdata[key] = groups[grpkey][0];
+  useEffect(() => {
+    const groups = userinfo.reduce((groups, item) => {
+      const group = groups[item.spent_category] || [];
+      group.push(item.amount);
+      groups[item.spent_category] = group;
+      return groups;
+    }, {});
+
+    if (groups) {
+      for (var grpkey of Object.keys(groups)) {
+        for (var key of Object.keys(graphdata)) {
+          if (key === grpkey) {
+            const total = groups[grpkey].reduce((acc, curr) => {
+              return acc + curr;
+            }, 0);
+            graphdata[key] = total;
+          }
         }
       }
     }
-  }
-  console.log(graphdata);
+  }, [userinfo]);
+
   const data = {
-    labels: CATEGORIES,
+    labels: CATEGORIES.map((c) => c.name),
     datasets: [
       {
-        data: [
-          graphdata["Food"],
-          graphdata["Entertainment"],
-          graphdata["Education"],
-          graphdata["Shopping"],
-          graphdata["Health"],
-          graphdata["Gifts"],
-          graphdata["Investments"],
-          graphdata["Bills"],
-          graphdata["Travel"],
-          graphdata["Smoking"],
-          graphdata["Others"],
-        ],
+        data: CATEGORIES.map((c) =>
+          calculatePercentage(total, graphdata[c.name])
+        ),
         backgroundColor: [
-          "rgb(255, 99, 132)",
-          "rgb(54, 162, 235)",
-          "rgb(255, 205, 86)",
-          "#19e0cc",
-          "#1c6ce6",
-          "#f76fee",
-          "rgb(0,0,128)",
-          "rgba(0,255,255, 0.7)",
-          "rgb(128,0,128)",
-          "rgb(255,0,0)",
+          "#ff6347",
+          "#de3c3c",
+          "#e649bf",
+          "#af49e6",
+          "#7349e6",
+          "#38b8eb",
+          "#49e6b7",
+          "#49e666",
+          "#bce649",
+          "#e6e649",
+          "#e69d49",
         ],
         borderColor: [
-          "rgb(255, 99, 132)",
-          "rgb(54, 162, 235)",
-          "rgb(255, 205, 86)",
-          "#19e0cc",
-          "#1c6ce6",
-          "#f76fee",
-          "rgb(0,0,128)",
-          "rgba(0,255,255, 0.7)",
-          "rgb(128,0,128)",
-          "rgb(255,0,0)",
+          "#ff6347",
+          "#de3c3c",
+          "#e649bf",
+          "#af49e6",
+          "#7349e6",
+          "#38b8eb",
+          "#49e6b7",
+          "#49e666",
+          "#bce649",
+          "#e6e649",
+          "#e69d49",
         ],
         borderWidth: 1,
       },
