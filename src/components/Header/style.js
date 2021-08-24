@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   headerContainer: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "flex-start",
   },
 
@@ -36,17 +37,16 @@ const useStyles = makeStyles((theme) => ({
   },
   profile: {
     display: "flex",
-    justifyContent: "flex-end",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    width: "90%",
+    width: "50%",
 
   },
   username: {
     color: "#fff",
-    marginLeft: "10px",
-    marginRight: "10px",
     fontSize: "1.5rem",
-    fontWeight: "bold",
+    fontWeight: "bolder",
 
   },
 
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "column",
     },
     username: {
-      fontSize: "0.9rem",
+      fontSize: "1rem",
     },
     logout: {
       fontSize: "0.6rem",

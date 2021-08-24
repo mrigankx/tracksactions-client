@@ -45,12 +45,26 @@ const Header = () => {
           >
             Managexpense
           </Typography>
+          <Typography
+            component={Link}
+            to="/"
+            style={{
+              flexGrow: 1,
+              fontWeight: "bolder",
+              color: "#808080",
+              textDecoration: "none",
+            }}
+            variant="body1"
+            align="right"
+          >
+            Powered by Speechly
+          </Typography>
         </div>
         <Toolbar className={classes.toolbar}>
           {user ? (
             <div className={classes.profile}>
               <Avatar>{user.name.charAt(0)}</Avatar>
-              <Typography className={classes.username} variant="body1">
+              <Typography className={classes.username} variant="inherit">
                 Hello, {user.name}
               </Typography>
               <Button
